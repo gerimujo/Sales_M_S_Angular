@@ -1,0 +1,66 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+
+.divadmin {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 1300px;
+  height: 600px;
+  background-color: #0f0c29;
+}
+.loginadmin {
+  width: 400px;
+  height: 500px;
+  border: 2px #ffd700 solid;
+  position: absolute;
+  left: 450px;
+  top: 50px;
+  border-radius: 5%;
+  background-color: black;
+}
+.inpadmin {
+  position: absolute;
+  top: 300px;
+  height: 30px;
+  left: 40px;
+  width: 300px;
+}
+.inpass {
+  position: absolute;
+  top: 350px;
+  height: 30px;
+  left: 40px;
+  width: 300px;
+}
+.imgs {
+  width: 250px;
+  height: 250px;
+  margin-left: 60px;
+}
+.submitadmin {
+  position: absolute;
+  top: 420px;
+  left: 150px;
+  background-color: white;
+  color: black;
+  width: 70px;
+  height: 25px;
+  border-radius: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.backadmin {
+  position: absolute;
+  margin-left: 80px;
+  margin-top: 50px;
+  border: #ffd700 1px solid;
+  background-color: #0f0c29;
+  color: white;
+  width: 120px;
+  height: 30px;
+}
+.backadmin:hover {
+  color: #ffd700;
+}

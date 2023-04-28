@@ -1,0 +1,96 @@
+@import "~@fortawesome/fontawesome-free/css/all.css";
+
+.contadmin {
+  width: 1180px;
+  min-height: 610px;
+
+  background-color: #ffd700;
+  position: absolute;
+  top: 0px;
+  left: 100px;
+}
+.contelement {
+  width: 1100px;
+
+  margin: 50px;
+  display: flex;
+  flex-flow: wrap row;
+}
+.element {
+  width: 300px;
+  height: 70px;
+  border: 1px black solid;
+  display: flex;
+  background-color: #0f0c29;
+  margin: 20px;
+}
+
+.element i {
+  margin-top: 14px;
+  margin-left: 10px;
+  font-size: 40px;
+}
+
+.element p {
+  margin-left: 10px;
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+#xx {
+  font-size: 25px;
+  margin-left: 100px;
+  margin-top: 20px;
+  color: white;
+}
+.menu {
+  width: 170px;
+  height: 50px;
+  background-color: #0f0c29;
+  position: relative;
+  top: -10px;
+  left: 120px;
+  color: white;
+
+  border-radius: 5%;
+}
+.menu div {
+  width: 100px;
+  margin-left: 30px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+.divgri1 {
+  width: 1180px;
+  height: 900px;
+  background-color: black;
+  opacity: 0.3;
+  position: fixed;
+  top: 0px;
+  left: 100px;
+  z-index: 13;
+}
+.createwaiter {
+  width: 350px;
+  height: 300px;
+  position: fixed;
+  top: 100px;
+  left: 500px;
+  background-color: #0f0c29;
+  z-index: 15;
+  border-radius: 5%;
+}
+.addwaiter {
+  position: relative;
+  top: 40px;
+  left: 50px;
+  background-color: #0f0c29;
+  color: white;
+  width: 120px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+}
+.addwaiter:hover {
+  color: #ffd700;
+}

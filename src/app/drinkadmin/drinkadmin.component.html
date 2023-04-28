@@ -1,0 +1,79 @@
+<div>
+  <div style="opacity: 0.3" [style.display]="disgrey" class="grey"></div>
+  <div [style.display]="disch" class="edit">
+    <br />
+    <i
+      (click)="close()"
+      class="fa-solid fa-xmark"
+      style="
+        position: relative;
+        top: 10px;
+        left: 240px;
+        font-size: 30px;
+        color: white;
+      "
+    ></i>
+
+    <p style="position: relative; top: 20px; left: 30px; color: white">Name</p>
+
+    <input
+      [(ngModel)]="namepr1"
+      type="text"
+      placeholder="Put the new name"
+      style="position: relative; top: -15px; left: 100px"
+    />
+    <p style="position: relative; top: 0px; left: 30px; color: white">Price</p>
+
+    <input
+      [(ngModel)]="pricepr1"
+      type="text"
+      placeholder="Put the new price"
+      style="position: relative; left: 100px; top: -35px"
+    />
+    <p style="position: relative; left: 30px; top: -10px; color: white">
+      Quantity
+    </p>
+
+    <input
+      [(ngModel)]="quantitypr1"
+      type="text"
+      placeholder="Put the new quantity"
+      style="position: absolute; top: 195px; left: 100px"
+    />
+    <button (click)="submitedit()" style="position: relative; left: 120px">
+      Submit
+    </button>
+  </div>
+  <div class="drcontainer">
+    <input [(ngModel)]="name" style="margin-left: 100px" type="text" />
+    <input [(ngModel)]="price" type="text" />
+    <input [(ngModel)]="quantity" type="text" />
+    <div (click)="add()" id="add">
+      <p style="position: relative; top: -13px">Add Product</p>
+    </div>
+    <div class="divtable">
+      <table>
+        <thead>
+          <tr>
+            <td>Name</td>
+            <td>Price($)</td>
+            <td>Quantity</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let prod of drinks">
+            <td>{{ prod.name }}</td>
+            <td>{{ prod.price }}</td>
+            <td>{{ prod.quantity }}</td>
+            <div class="editbutton" (click)="openchange(prod)">Edit</div>
+
+            <div class="deletebutton" (click)="delete(prod.id)">
+              Delete the product
+            </div>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<app-navbaramdin></app-navbaramdin>

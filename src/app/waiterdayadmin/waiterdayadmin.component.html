@@ -1,0 +1,48 @@
+<div class="divhistorycontainer">
+  <div>
+    <div class="divdycontainer">
+      <div
+        (click)="openday(d)"
+        class="waiterdayelement"
+        *ngFor="let d of arrays"
+      >
+        <p style="margin-left: 55px">Day {{ d }}</p>
+      </div>
+    </div>
+    <div class="tablediv">
+      <table border="1">
+        <thead>
+          <tr>
+            <td>Product</td>
+            <td>Quantity</td>
+            <td>Price($)</td>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="orders.length > 0">
+            <tr *ngFor="let d of orders">
+              <ng-container *ngIf="d.id != 0">
+                <td>
+                  {{ d.product }}
+                </td>
+                <td>
+                  {{ d.quatity }}
+                </td>
+                <td>
+                  {{ d.price }}
+                </td>
+              </ng-container>
+            </tr>
+            <tr>
+              <td>Total price</td>
+              <td></td>
+              <td>{{ totalhistiry }}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<app-navbaramdin></app-navbaramdin>

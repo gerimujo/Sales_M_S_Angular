@@ -1,0 +1,56 @@
+<div class="divhomewaiter">
+  <p style="position: relative; top: 10px; left: 200px; font-size: 30px">
+    Products
+  </p>
+  <div class="productcontainer">
+    <div (click)="click(dat)" *ngFor="let dat of drinks">
+      <p>{{ dat.name }}</p>
+    </div>
+  </div>
+  <table style="position: absolute; top: 100px; left: 700px">
+    <thead>
+      <tr>
+        <td>Name</td>
+        <td>Price for unit</td>
+        <td>Quantity</td>
+        <td>Price($)</td>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="totali.length > 1">
+        <tr *ngFor="let d of totali">
+          <ng-container *ngIf="d.idper != 0">
+            <td>
+              {{ d.product }}
+            </td>
+            <td>
+              {{ d.price }}
+            </td>
+            <td>
+              {{ d.quatity }}
+            </td>
+            <td>
+              {{ d.price * d.quatity }}
+            </td>
+          </ng-container>
+        </tr>
+        <tr>
+          <td>Total price</td>
+          <td></td>
+          <td></td>
+          <td>{{ totapprice }}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <div class="confirm1" (click)="submit()">Confirm</div>
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
+
+<app-navbarwaiter></app-navbarwaiter>

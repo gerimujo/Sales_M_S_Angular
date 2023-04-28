@@ -1,0 +1,50 @@
+.divhomewaiter {
+  width: 1170px;
+  height: 610px;
+  background-color: #ffd700;
+  position: absolute;
+  top: 0px;
+
+  left: 100px;
+}
+.productcontainer {
+  width: 510px;
+  height: auto;
+  max-height: 410px;
+
+  position: relative;
+  top: 20px;
+  display: flex;
+  flex-flow: row wrap;
+  left: 100px;
+  overflow: auto;
+}
+.productcontainer div {
+  border: 1px #ffd700 solid;
+  width: 100px;
+  height: 50px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  background-color: #0f0c29;
+  color: white;
+}
+thead {
+  background-color: #0f0c29;
+  color: white;
+}
+td {
+  width: 100px;
+}
+.confirm1 {
+  width: 120px;
+  height: 25px;
+  background-color: #0f0c29;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+.confirm1:hover {
+  color: #ffd700;
+}

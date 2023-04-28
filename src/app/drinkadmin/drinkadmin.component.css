@@ -1,0 +1,108 @@
+@import "~@fortawesome/fontawesome-free/css/all.css";
+
+.drcontainer {
+  width: 1160px;
+  height: 620px;
+  background-color: #ffd700;
+  position: absolute;
+  left: 100px;
+  top: 0px;
+}
+.divtable {
+  height: 500px;
+  overflow: auto;
+  position: relative;
+  top: 100px;
+}
+table {
+  width: 900px;
+  position: relative;
+  left: 100px;
+}
+thead {
+  background-color: #0f0c29;
+  color: white;
+}
+tr {
+  border-bottom: 5px black solid;
+}
+#add {
+  background-color: #0f0c29;
+  color: white;
+  width: 120px;
+  height: 25px;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  left: 700px;
+  top: 50px;
+}
+#add :hover {
+  color: #ffff00;
+}
+.menutable {
+  width: 100px;
+  height: 100px;
+  background-color: blue;
+}
+td {
+  width: 150px;
+}
+input {
+  width: 130px;
+  margin-right: 20px;
+  position: relative;
+  top: 50px;
+}
+.grey {
+  width: 1200px;
+  height: 700px;
+  position: fixed;
+  top: 0px;
+  left: 90px;
+  background-color: black;
+
+  z-index: 10;
+}
+.edit {
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  top: 100px;
+  left: 500px;
+  background-color: #0f0c29;
+  border-radius: 5%;
+
+  z-index: 12;
+}
+
+.editbutton:hover {
+  color: #ffd700;
+}
+.editbutton {
+  width: 100px;
+  height: 25px;
+  background-color: #0f0c29;
+  color: white;
+  display: flex;
+  position: relative;
+  top: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-left: 20px;
+}
+.deletebutton {
+  width: 150px;
+  height: 25px;
+  background-color: #0f0c29;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  left: 130px;
+  top: -15px;
+}
+.deletebutton:hover {
+  color: #ffd700;
+}

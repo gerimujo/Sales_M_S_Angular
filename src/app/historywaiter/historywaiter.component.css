@@ -1,0 +1,59 @@
+.divhistorycontainer {
+  width: 1180px;
+  height: 610px;
+  background-color: #ffd700;
+  position: absolute;
+  left: 100px;
+  top: 0px;
+}
+
+.divdycontainer {
+  width: 700px;
+  position: absolute;
+  display: flex;
+  max-height: 500px;
+  overflow: auto;
+  left: 50px;
+  top: 80px;
+  flex-flow: row wrap;
+  align-items: flex-start;
+}
+
+td {
+  width: 100px;
+}
+
+.tablediv {
+  position: relative;
+  top: 80px;
+  left: 750px;
+  height: 500px;
+  overflow: auto;
+  width: 350px;
+}
+.endday {
+  top: 20px;
+  width: 100px;
+  height: 30px;
+  position: absolute;
+  left: 70px;
+  color: white;
+  background-color: #0f0c29;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.endday:hover {
+  color: #ffd700;
+}
+.openday {
+  width: 150px;
+  height: 50px;
+  background-color: #0f0c29;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  color: white;
+}
+.openday:hover {
+  color: #ffd700;
+}

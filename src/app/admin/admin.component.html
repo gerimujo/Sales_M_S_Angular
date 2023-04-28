@@ -1,0 +1,17 @@
+<div class="divadmin">
+  <button (click)="goback()" class="backadmin">Go back</button>
+  <div class="loginadmin">
+    <img src="assets/logo.jpg" class="imgs" alt="img" />
+    <input placeholder="username" [(ngModel)]="usrname" class="inpadmin" />
+    <input
+      placeholder="password"
+      type="password"
+      [(ngModel)]="password"
+      class="inpass"
+    />
+    <p style="color: red; position: relative; top: 140px; left: 120px">
+      {{ Error }}
+    </p>
+    <div type="submit" (click)="click()" class="submitadmin">Log in</div>
+  </div>
+</div>

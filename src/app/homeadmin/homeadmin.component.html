@@ -1,0 +1,88 @@
+<div>
+  <div [style.display]="disgri2" class="divgri1"></div>
+  <div [style.display]="createdis" class="createwaiter">
+    <br />
+    <i
+      (click)="close()"
+      class="fa-solid fa-xmark"
+      style="
+        color: white;
+        position: relative;
+        top: 10px;
+        left: 270px;
+        font-size: 30px;
+      "
+    ></i>
+
+    <p style="position: relative; left: 40px; top: 20px; color: white">
+      Username
+    </p>
+    <input
+      [(ngModel)]="emri"
+      style="position: relative; left: 120px; top: -15px"
+    />
+    <p style="position: relative; left: 40px; color: white">Password</p>
+    <input
+      [(ngModel)]="password"
+      style="position: relative; left: 120px; top: -35px"
+    />
+    <br />
+    <button (click)="sendata()" style="position: relative; left: 150px">
+      Submit
+    </button>
+  </div>
+  <div [style.display]="createdis1" class="createwaiter">
+    <br />
+    <i
+      (click)="closeedit1()"
+      class="fa-solid fa-xmark"
+      style="
+        position: relative;
+        top: 10px;
+        left: 270px;
+        font-size: 30px;
+        color: white;
+      "
+    ></i>
+
+    <p style="position: relative; left: 40px; top: 20px; color: white">
+      Username
+    </p>
+    <input
+      [(ngModel)]="namehap"
+      style="position: relative; left: 120px; top: -15px"
+    />
+    <p style="position: relative; left: 40px; color: white">Password</p>
+    <input
+      [(ngModel)]="passhap"
+      style="position: relative; left: 120px; top: -35px"
+    />
+    <br />
+    <button (click)="updatewaiter()" style="position: relative; left: 150px">
+      Submit
+    </button>
+  </div>
+  <div class="contadmin">
+    <div class="addwaiter" (click)="opencreate()">
+      <p style="position: relative; top: -10px">Add waiter</p>
+    </div>
+    <div class="contelement">
+      <div class="element" *ngFor="let dat of waiter">
+        <i style="color: white" class="fa-solid fa-user"></i>
+        <p style="color: white">{{ dat.name }}</p>
+        <div>
+          <i
+            id="xx"
+            (click)="rregullo(dat.id)"
+            class="fa-solid fa-ellipsis-vertical"
+          ></i>
+          <div [style.display]="dat.display" class="menu">
+            <div (click)="delete(dat.id)">Remove Waiter</div>
+            <div (click)="openedit(dat)">Edit</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-navbaramdin></app-navbaramdin>
