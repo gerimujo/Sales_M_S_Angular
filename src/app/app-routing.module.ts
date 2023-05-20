@@ -14,12 +14,12 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'loginadmin', component: AdminComponent },
   { path: 'loginwaiter', component: WaiterloginComponent },
-  { path: 'waiterlist', component: HomeadminComponent },
-  { path: 'drinklist', component: DrinkadminComponent },
-  { path: 'homewaiter', component: HomewaiterComponent },
-  { path: 'orderswaiter', component: HistorywaiterComponent },
-  { path: 'waiterhistoryadmin', component: WaiterlisthistoryComponent },
-  { path: 'waiterdaylistadmin', component: WaiterdayadminComponent },
+  { path: 'waiterlist/:userId', component: HomeadminComponent },
+  { path: 'drinklist/:userId', component: DrinkadminComponent },
+  { path: 'homewaiter/:userId', component: HomewaiterComponent },
+  { path: 'orderswaiter/:userId', component: HistorywaiterComponent },
+  { path: 'waiterhistoryadmin/:userId', component: WaiterlisthistoryComponent },
+  { path: 'waiterdaylistadmin/:userId', component: WaiterdayadminComponent },
 ];
 
 @NgModule({

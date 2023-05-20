@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-waiterdayadmin',
@@ -10,7 +11,7 @@ export class WaiterdayadminComponent {
   public num: number = 20;
   arrays: number[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute) {}
   public orders1 = [
     {
       id: 0,
@@ -58,15 +59,23 @@ export class WaiterdayadminComponent {
         }
       });
   }
+  userId: String | null = null;
+
   krijo() {
+    this.userId = this.route.snapshot.paramMap.get('userId');
+
     this.http
-      .get('http://localhost:8080/rest/getdays')
+      .get(`http://localhost:8080/rest/getdays/${this.userId}`)
       .subscribe((response: any) => {
         this.num = response;
-
-        for (var i = 1; i <= this.num; i++) {
-          this.arrays.push(i);
+        if (response == -1) {
+          window.location.href = 'http://localhost:4200/';
+        } else {
+          for (var i = 1; i <= this.num; i++) {
+            this.arrays.push(i);
+          }
         }
+
         console.log(this.arrays);
       });
     this.http

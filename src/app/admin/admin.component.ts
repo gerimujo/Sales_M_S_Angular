@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { DoBootstrap } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin',
@@ -9,7 +10,7 @@ import { catchError, throwError } from 'rxjs';
   styleUrls: ['./admin.component.css'],
 })
 export class AdminComponent {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
   goback() {
     window.location.href = 'http://localhost:4200/';
   }
@@ -20,19 +21,12 @@ export class AdminComponent {
     const body = { id: 0, user: this.usrname, password: this.password };
     this.http
       .post('http://localhost:8080/rest/loginadmin', body)
-      .pipe(
-        catchError((error: any) => {
-          console.error(error);
-          this.Error = 'Data is not correct';
-          return throwError('An error occurred while logging in.');
-        })
-      )
       .subscribe((response: any) => {
         console.log(response);
-        if (response[0] === 'Ok') {
-          window.location.href = 'http://localhost:4200/waiterlist';
+        if (response === 'Data is not correct') {
+          this.Error = response;
         } else {
-          this.Error = response[0];
+          this.router.navigate([`/waiterlist/${response}`]);
         }
       });
     console.log(this.usrname + '  ' + this.password);

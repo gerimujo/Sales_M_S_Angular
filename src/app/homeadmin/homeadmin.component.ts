@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-homeadmin',
@@ -7,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./homeadmin.component.css'],
 })
 export class HomeadminComponent {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute) {}
 
   public emri: String = '';
   public password: String = '';
@@ -37,6 +38,7 @@ export class HomeadminComponent {
   ngOnInit() {
     this.getdata();
   }
+
   delete(id: number) {
     this.http
       .delete(`http://localhost:8080/rest/deletewaiter?id=${id}`)
@@ -44,12 +46,20 @@ export class HomeadminComponent {
         window.location.href = window.location.href;
       });
   }
+  userId: String | null = null;
   getdata() {
+    this.userId = this.route.snapshot.paramMap.get('userId');
+
     this.http
-      .get('http://localhost:8080/rest/getWaiter')
+      .get(`http://localhost:8080/rest/getWaiter/${this.userId}`)
       .subscribe((response: any) => {
+        console.log('datalength' + response[0].id);
         if (response.length > 0) {
-          this.waiter = response;
+          if (response[0].id == -1) {
+            window.location.href = 'http://localhost:4200/';
+          } else {
+            this.waiter = response;
+          }
         }
       });
   }

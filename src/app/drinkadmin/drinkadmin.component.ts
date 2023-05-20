@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-drinkadmin',
   templateUrl: './drinkadmin.component.html',
@@ -18,7 +18,7 @@ export class DrinkadminComponent {
   public pricepr1: String = '';
   public quantitypr1: String = '';
   public prov: String = '';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute) {}
   public drinks = [{ id: 0, name: '', price: '', quantity: '' }];
 
   close() {
@@ -93,12 +93,19 @@ export class DrinkadminComponent {
       });
     console.log(body);
   }
+  userId: String | null = null;
+
   fetch() {
+    this.userId = this.route.snapshot.paramMap.get('userId');
+
     this.http
-      .get('http://localhost:8080/rest/getDrinks')
+      .get(`http://localhost:8080/rest/getDrinks/${this.userId}`)
       .subscribe((response: any) => {
-        this.drinks = response;
-        console.log(this.drinks);
+        if (response == 'Not done') {
+          window.location.href = 'http://localhost:4200/';
+        } else {
+          this.drinks = response;
+        }
       });
   }
 
@@ -112,10 +119,15 @@ export class DrinkadminComponent {
       .post('http://127.0.0.1:8080/rest/addDrinks', dsend, {
         withCredentials: true,
       })
-      .subscribe((response: any) => {
-        if (response.length > 0) {
-          window.location.href = window.location.href;
+      .subscribe(
+        (response: any) => {
+          if (response == 'Created') {
+            this.fetch();
+          }
+        },
+        (error) => {
+          console.log(error);
         }
-      });
+      );
   }
 }

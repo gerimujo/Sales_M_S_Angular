@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-homewaiter',
@@ -12,7 +13,7 @@ export class HomewaiterComponent {
     { id: 2, name: 'pepsi', price: 20, quantity: 10 },
     { id: 3, name: 'fresh', price: 20, quantity: 15 },
   ];
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute) {}
   totali = [
     {
       iduser: 0,
@@ -30,11 +31,19 @@ export class HomewaiterComponent {
   ngOnInit() {
     this.getDrink();
   }
+  userId: String | null = null;
+
   getDrink() {
+    this.userId = this.route.snapshot.paramMap.get('userId');
+
     this.http
-      .get('http://localhost:8080/rest/getDrinks')
+      .get(`http://localhost:8080/rest/getDrinks1/${this.userId}`)
       .subscribe((response: any) => {
-        this.drinks = response;
+        if (response[0].id == -1) {
+          window.location.href = 'http://localhost:4200/';
+        } else {
+          this.drinks = response;
+        }
       });
   }
 

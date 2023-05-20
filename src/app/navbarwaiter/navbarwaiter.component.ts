@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-navbarwaiter',
@@ -6,13 +7,20 @@ import { Component } from '@angular/core';
   styleUrls: ['./navbarwaiter.component.css'],
 })
 export class NavbarwaiterComponent {
+  constructor(private route: ActivatedRoute) {}
+  userId: String | null = null;
+
   neworder() {
-    window.location.href = 'http://localhost:4200/homewaiter';
+    this.userId = this.route.snapshot.paramMap.get('userId');
+
+    window.location.href = `http://localhost:4200/homewaiter/${this.userId}`;
   }
   logout() {
     window.location.href = 'http://localhost:4200/';
   }
   history() {
-    window.location.href = 'http://localhost:4200/orderswaiter/';
+    this.userId = this.route.snapshot.paramMap.get('userId');
+
+    window.location.href = `http://localhost:4200/orderswaiter/${this.userId}`;
   }
 }
