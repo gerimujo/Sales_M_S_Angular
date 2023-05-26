@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { Observable, catchError, throwError } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
+
 @Component({
   selector: 'app-drinkadmin',
   templateUrl: './drinkadmin.component.html',
@@ -18,7 +22,12 @@ export class DrinkadminComponent {
   public pricepr1: String = '';
   public quantitypr1: String = '';
   public prov: String = '';
-  constructor(private http: HttpClient, private route: ActivatedRoute) {}
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router,
+    private cookieService: CookieService
+  ) {}
   public drinks = [{ id: 0, name: '', price: '', quantity: '' }];
 
   close() {
@@ -30,49 +39,35 @@ export class DrinkadminComponent {
   }
 
   delete(id: number) {
+    const body = { id: id, token: this.cookieService.get('admin') };
     this.http
-      .delete(`http://localhost:8080/rest/deletedrink?id=${id}`)
+      .delete(`http://localhost:8080/rest/deletedrink?id=${id}`, {
+        responseType: 'text',
+        body: JSON.stringify(body),
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          //  console.error('An error occurred:', error.message);
+          return throwError('Ndodhi nje problem');
+        })
+      )
       .subscribe((response: any) => {
-        if (response.length > 0) {
-          window.location.href = window.location.href;
+        if (response == 'Ok') {
+          this.fetch();
         }
       });
   }
   openchange(propd: any) {
+    console.log('u styp');
     this.idpr = propd.id;
     this.namepr1 = propd.name;
     this.pricepr1 = propd.price;
     this.quantitypr1 = propd.quantity;
+    this.disgrey = 'block';
+    this.disch = 'block';
     // this.namepr = propd.name;
     // this.pricepr = propd.price;
     // this.quantitypr = propd.quantity;
-    console.log('butoni edit u shtyp');
-    this.disgrey = 'block';
-    this.disch = 'block';
-    console.log('idpr' + this.idpr);
-
-    console.log('--------------------------');
-    console.log('id' + propd.id);
-    console.log('name' + propd.name);
-    console.log('price' + propd.price);
-    console.log('quantity' + propd.quantity);
-  }
-  getvalue(s: String, ss: String, sss: String) {
-    //this.namepr = s;
-    //this.pricepr = ss;
-    //quantitypr = sss;
-  }
-
-  print() {
-    console.log('id22' + this.idpr);
-    console.log('name22' + this.namepr1);
-    console.log('price22' + this.pricepr1);
-    console.log('quatity22' + this.quantitypr1);
-    console.log('prov' + this.prov);
-    console.log('-------------------');
-    console.log('444+' + this.name);
-    console.log('444+' + this.price);
-    console.log('444+' + this.quantity);
   }
 
   submitedit() {
@@ -81,31 +76,42 @@ export class DrinkadminComponent {
       name: this.namepr1,
       price: this.pricepr1,
       quantity: this.quantitypr1,
+      token: this.cookieService.get('admin'),
     };
     this.http
       .put('http://localhost:8080/rest/updateDrink', body, {
-        withCredentials: true,
+        responseType: 'text',
       })
+      .pipe(
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          //  console.error('An error occurred:', error.message);
+          return throwError('Ndodhi nje problem');
+        })
+      )
       .subscribe((response: any) => {
-        if (response.length > 0) {
-          window.location.href = window.location.href;
+        if (response == 'Ok') {
+          this.disgrey = 'none';
+          this.disch = 'none';
+          this.fetch();
         }
       });
-    console.log(body);
   }
   userId: String | null = null;
 
   fetch() {
     this.userId = this.route.snapshot.paramMap.get('userId');
 
+    const body = { id: this.userId, token: this.cookieService.get('admin') };
     this.http
-      .get(`http://localhost:8080/rest/getDrinks/${this.userId}`)
+      .post(`http://localhost:8080/rest/getDrinks/${this.userId}`, body)
+      .pipe(
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          //  console.error('An error occurred:', error.message);
+          return throwError(this.router.navigate([``]));
+        })
+      )
       .subscribe((response: any) => {
-        if (response == 'Not done') {
-          window.location.href = 'http://localhost:4200/';
-        } else {
-          this.drinks = response;
-        }
+        this.drinks = response;
       });
   }
 
@@ -114,20 +120,26 @@ export class DrinkadminComponent {
       name: this.name,
       price: this.price,
       quantity: this.quantity,
+      token: this.cookieService.get('admin'),
     };
     this.http
       .post('http://127.0.0.1:8080/rest/addDrinks', dsend, {
-        withCredentials: true,
+        responseType: 'text',
       })
-      .subscribe(
-        (response: any) => {
-          if (response == 'Created') {
-            this.fetch();
-          }
-        },
-        (error) => {
-          console.log(error);
+      .pipe(
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          console.error('An error occurred:', error.message);
+          return throwError('Ndodhi nje problem');
+        })
+      )
+      .subscribe((response: any) => {
+        console.log(response);
+        if (response == 'Ok') {
+          this.name = '';
+          this.price = '';
+          this.quantity = '';
+          this.fetch();
         }
-      );
+      });
   }
 }

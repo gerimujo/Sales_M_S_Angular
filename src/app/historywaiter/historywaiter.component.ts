@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-
+import { Router } from '@angular/router';
+import { Observable, catchError, throwError } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 @Component({
   selector: 'app-historywaiter',
   templateUrl: './historywaiter.component.html',
@@ -11,7 +13,12 @@ export class HistorywaiterComponent {
   public num: number = 20;
   arrays: number[] = [];
 
-  constructor(private http: HttpClient, private route: ActivatedRoute) {}
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router,
+    private cookie: CookieService
+  ) {}
   public orders1 = [
     {
       id: 0,
@@ -51,24 +58,36 @@ export class HistorywaiterComponent {
   }
   public totalhistiry: number = 0;
   endday() {
+    this.userId = this.route.snapshot.paramMap.get('userId');
+    const body = { id: this.userId, token: this.cookie.get('waiter') };
     this.http
-      .put('http://localhost:8080/rest/updatestateday', this.orders)
+      .post('http://localhost:8080/rest/updatestateday', body)
+      .pipe(
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          //  console.error('An error occurred:', error.message);
+          return throwError('Ndodhi nje problem');
+        })
+      )
       .subscribe((response: any) => {
-        if (response.length > 0) {
-          window.location.href = window.location.href;
-        }
+        this.krijo();
       });
   }
   userId: String | null = null;
 
   krijo() {
     this.userId = this.route.snapshot.paramMap.get('userId');
-
+    const body = { id: this.userId, token: this.cookie.get('waiter') };
     this.http
-      .get(`http://localhost:8080/rest/getdays1/${this.userId}`)
+      .post(`http://localhost:8080/rest/getdays1/${this.userId}`, body)
+      .pipe(
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          //  console.error('An error occurred:', error.message);
+          return throwError([this.router.navigate([''])]);
+        })
+      )
       .subscribe((response: any) => {
         if (response == -1) {
-          window.location.href = 'http://localhost:4200/';
+          this.router.navigate(['']);
         } else {
           this.num = response;
 
@@ -76,11 +95,18 @@ export class HistorywaiterComponent {
             this.arrays.push(i);
           }
         }
-        console.log(this.arrays);
       });
+
     this.http
-      .get('http://localhost:8080/rest/allorders')
+      .post('http://localhost:8080/rest/allorders', body)
+      .pipe(
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          //  console.error('An error occurred:', error.message);
+          return throwError('Ndodhi nje problem');
+        })
+      )
       .subscribe((response: any) => {
+        console.log(response);
         this.orders1 = response;
       });
   }

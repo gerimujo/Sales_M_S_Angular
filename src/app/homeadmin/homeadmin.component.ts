@@ -1,14 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-
+import { Router } from '@angular/router';
+import { Observable, catchError, throwError } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 @Component({
   selector: 'app-homeadmin',
   templateUrl: './homeadmin.component.html',
   styleUrls: ['./homeadmin.component.css'],
 })
 export class HomeadminComponent {
-  constructor(private http: HttpClient, private route: ActivatedRoute) {}
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router,
+    private cookieService: CookieService
+  ) {}
 
   public emri: String = '';
   public password: String = '';
@@ -21,12 +28,30 @@ export class HomeadminComponent {
     this.passhap = dd.password;
   }
   updatewaiter() {
-    const body = { id: this.id, name: this.namehap, password: this.passhap };
+    const token = this.cookieService.get('admin');
+    const body = {
+      id: this.id,
+      name: this.namehap,
+      password: this.passhap,
+      token: token,
+    };
     this.http
-      .put('http://localhost:8080/rest/updatawaiter', body)
+      .put('http://localhost:8080/rest/updatawaiter', body, {
+        responseType: 'text',
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          //  console.error('An error occurred:', error.message);
+          return throwError('Ndodhi nje problem');
+        })
+      )
       .subscribe((response: any) => {
-        if (response.length > 0) {
-          window.location.href = window.location.href;
+        if (response == 'Ok') {
+          this.createdis1 = 'none';
+          this.disgri2 = 'none';
+
+          this.createdis = 'none';
+          this.getdata();
         }
       });
   }
@@ -40,37 +65,68 @@ export class HomeadminComponent {
   }
 
   delete(id: number) {
+    this.userId = this.route.snapshot.paramMap.get('userId');
+    const body = { id: this.userId, token: this.cookieService.get('admin') };
     this.http
-      .delete(`http://localhost:8080/rest/deletewaiter?id=${id}`)
+      .delete(`http://localhost:8080/rest/deletewaiter?id=${id}`, {
+        responseType: 'text',
+        body: JSON.stringify(body),
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          //  console.error('An error occurred:', error.message);
+          return throwError('Ndodhi nje problem');
+        })
+      )
       .subscribe((response: any) => {
-        window.location.href = window.location.href;
+        if (response == 'Ok') {
+          this.getdata();
+        }
       });
   }
   userId: String | null = null;
   getdata() {
     this.userId = this.route.snapshot.paramMap.get('userId');
-
+    const body = { id: this.userId, token: this.cookieService.get('admin') };
+    console.log(body);
+    console.log(this.cookieService.get('admin'));
     this.http
-      .get(`http://localhost:8080/rest/getWaiter/${this.userId}`)
+      .post(`http://localhost:8080/rest/getWaiter/${this.userId}`, body)
+      .pipe(
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          //  console.error('An error occurred:', error.message);
+          return throwError(this.router.navigate([``]));
+        })
+      )
       .subscribe((response: any) => {
-        console.log('datalength' + response[0].id);
-        if (response.length > 0) {
-          if (response[0].id == -1) {
-            window.location.href = 'http://localhost:4200/';
-          } else {
-            this.waiter = response;
-          }
-        }
+        console.log(response);
+
+        this.waiter = response;
       });
   }
   sendata() {
-    const body = { name: this.emri, password: this.password };
+    const token = this.cookieService.get('admin');
+    const body = { name: this.emri, password: this.password, token: token };
 
     this.http
-      .post('http://localhost:8080/rest/addWaiter', body)
+      .post('http://localhost:8080/rest/addWaiter', body, {
+        responseType: 'text',
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          console.error('An error occurred:', error.message);
+          return throwError('Ndodhi nje problem');
+        })
+      )
       .subscribe((response: any) => {
-        if (response.length > 0) {
-          window.location.href = window.location.href;
+        if (response == 'Ok') {
+          this.createdis1 = 'none';
+          this.disgri2 = 'none';
+
+          this.createdis = 'none';
+          this.getdata();
+          this.emri = '';
+          this.password = '';
         }
       });
   }

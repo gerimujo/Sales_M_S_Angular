@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { Observable, catchError, throwError } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-homewaiter',
@@ -13,7 +16,12 @@ export class HomewaiterComponent {
     { id: 2, name: 'pepsi', price: 20, quantity: 10 },
     { id: 3, name: 'fresh', price: 20, quantity: 15 },
   ];
-  constructor(private http: HttpClient, private route: ActivatedRoute) {}
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router,
+    private cookie: CookieService
+  ) {}
   totali = [
     {
       iduser: 0,
@@ -35,15 +43,17 @@ export class HomewaiterComponent {
 
   getDrink() {
     this.userId = this.route.snapshot.paramMap.get('userId');
-
+    const body = { id: this.userId, token: this.cookie.get('waiter') };
     this.http
-      .get(`http://localhost:8080/rest/getDrinks1/${this.userId}`)
+      .post(`http://localhost:8080/rest/getDrinks1/${this.userId}`, body)
+      .pipe(
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          //  return throwError(error.message);
+          return throwError([this.router.navigate([''])]);
+        })
+      )
       .subscribe((response: any) => {
-        if (response[0].id == -1) {
-          window.location.href = 'http://localhost:4200/';
-        } else {
-          this.drinks = response;
-        }
+        this.drinks = response;
       });
   }
 
@@ -75,7 +85,6 @@ export class HomewaiterComponent {
         return { ...d };
       }
     });
-    console.log(dd);
     this.totali = dd;
     if (dds == 0 && dds2 == 0) {
       const x = [
@@ -115,27 +124,54 @@ export class HomewaiterComponent {
         newarray.push({ ...d, quantity: vlera });
         return { ...d, quantity: vlera };
       } else {
-        return { d };
+        return { ...d };
       }
     });
 
     newarray.shift();
-    console.log(newarray.length);
+    const arraybody = newarray.map((r, i) => {
+      if (i == 0) {
+        return { ...r, token: this.cookie.get('waiter') };
+      } else {
+        return { ...r, token: 'cc' };
+      }
+    });
+    console.log(this.totali.toString);
     this.http
-      .put('http://localhost:8080/rest/updateDrinksorder', newarray)
+      .put('http://localhost:8080/rest/updateDrinksorder', arraybody, {
+        responseType: 'text',
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          //  console.error('An error occurred:', error.message);
+          return throwError('Ndodhi nje problem');
+        })
+      )
       .subscribe((response: any) => {
-        if (response.length > 0) {
-          window.location.href = window.location.href;
-        }
+        this.getDrink();
       });
     const vv = this.totali;
     vv.shift();
+    const body2 = vv.map((m, i) => {
+      if (i == 0) {
+        return { ...m, token: this.cookie.get('waiter') };
+      } else {
+        return { ...m, token: 'cc' };
+      }
+    });
+    console.log(body2);
     this.http
-      .post('http://localhost:8080/rest/addorder', vv)
-      .subscribe((Response: any) => {
-        if (Response.length > 0) {
-          window.location.href = window.location.href;
-        }
+      .post('http://localhost:8080/rest/addorder', body2, {
+        responseType: 'text',
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          //  console.error('An error occurred:', error.message);
+          return throwError('Ndodhi nje problem');
+        })
+      )
+      .subscribe((response: any) => {
+        this.getDrink();
       });
   }
 }

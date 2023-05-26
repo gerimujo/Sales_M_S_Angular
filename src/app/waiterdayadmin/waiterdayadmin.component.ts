@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Observable, catchError, throwError } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -11,7 +14,12 @@ export class WaiterdayadminComponent {
   public num: number = 20;
   arrays: number[] = [];
 
-  constructor(private http: HttpClient, private route: ActivatedRoute) {}
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router,
+    private cookieService: CookieService
+  ) {}
   public orders1 = [
     {
       id: 0,
@@ -53,9 +61,15 @@ export class WaiterdayadminComponent {
   endday() {
     this.http
       .put('http://localhost:8080/rest/updatestateday', this.orders)
+      .pipe(
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          //  console.error('An error occurred:', error.message);
+          return throwError('Ndodhi nje problem');
+        })
+      )
       .subscribe((response: any) => {
-        if (response.length > 0) {
-          window.location.href = window.location.href;
+        if (response.length == 'Ok') {
+          this.krijo();
         }
       });
   }
@@ -63,23 +77,32 @@ export class WaiterdayadminComponent {
 
   krijo() {
     this.userId = this.route.snapshot.paramMap.get('userId');
-
+    const body = { id: this.userId, token: this.cookieService.get('admin') };
     this.http
-      .get(`http://localhost:8080/rest/getdays/${this.userId}`)
+      .post(`http://localhost:8080/rest/getdays/${this.userId}`, body)
+      .pipe(
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          //  console.error('An error occurred:', error.message);
+          return throwError([this.router.navigate([''])]);
+        })
+      )
       .subscribe((response: any) => {
         this.num = response;
-        if (response == -1) {
-          window.location.href = 'http://localhost:4200/';
-        } else {
-          for (var i = 1; i <= this.num; i++) {
-            this.arrays.push(i);
-          }
+
+        for (var i = 1; i <= this.num; i++) {
+          this.arrays.push(i);
         }
 
         console.log(this.arrays);
       });
     this.http
       .get('http://localhost:8080/rest/allorders')
+      .pipe(
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          //  console.error('An error occurred:', error.message);
+          return throwError('Ndodhi nje problem');
+        })
+      )
       .subscribe((response: any) => {
         this.orders1 = response;
       });

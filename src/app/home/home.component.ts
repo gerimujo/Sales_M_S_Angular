@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-home',
@@ -7,11 +9,19 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private cookieService: CookieService,
+    @Inject(PLATFORM_ID) private platformId: any
+  ) {}
   ngOnInit() {
     this.delete();
   }
   delete() {
+    this.cookieService.delete('admin', '/');
+    this.cookieService.delete('waiter', '/');
+
     this.http
       .delete('http://localhost:8080/rest/deleteaccount')
       .subscribe((response: any) => {
@@ -19,9 +29,9 @@ export class HomeComponent {
       });
   }
   gotoadmin() {
-    window.location.href = 'http://localhost:4200/loginadmin';
+    this.router.navigate([`/loginadmin/`]);
   }
   gotowaiter() {
-    window.location.href = 'http://localhost:4200/loginwaiter';
+    this.router.navigate([`/loginwaiter/`]);
   }
 }
